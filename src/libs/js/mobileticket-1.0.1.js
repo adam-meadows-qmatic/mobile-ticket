@@ -2784,10 +2784,18 @@ var MobileTicketAPI = (function () {
       try {
         var branch = getSelectedBranch();
         var service = getSelectedService();
-        var CREATE_TICKET_REST_API = MOBILE_TICKET + "/" + SERVICES + "/" + service.id + "/" + BRANCHES + "/" + branch.id + "/" + TICKET + "/" + ISSUE;
+        var phone = $('#phone').val()
+        if(phone.startsWith("07")) {
+           phone = phone.replace("07", "447");
+        }
+        var CREATE_TICKET_REST_API = MOBILE_TICKET + "/" + SERVICES + "/" + service.id + "/" + BRANCHES + "/" + branch.id + "/" + TICKET + "/params/" + ISSUE;
         $.ajax({
           type: "POST",
+          data: "{\"parameters\": { \"phoneNumber\":\""+phone+"\" }}",
           dataType: "json",
+          headers: {
+            "content-type": "application/json"
+          },
           url: CREATE_TICKET_REST_API,
           error: function (xhr, status, errorMsg) {
             onError(xhr, status, errorMsg);
